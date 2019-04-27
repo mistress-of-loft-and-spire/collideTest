@@ -1,0 +1,5 @@
+-lib heaps
+-D resourcesPath=./res
+-js bin/collideTest.js
+-main Main
+-debug
