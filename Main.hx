@@ -1,5 +1,4 @@
-
-
+import h3d.Vector;
 import hxd.Key;
 
 class Main extends hxd.App {
@@ -12,6 +11,7 @@ class Main extends hxd.App {
 	function initInteract( i : h3d.scene.Interactive, m : h3d.scene.Mesh ) {
 		var beacon = null;
 		var color = m.material.color.clone();
+		
 		i.bestMatch = true;
 		i.onOver = function(e : hxd.Event) {
 			m.material.color.set(0, 1, 0);
@@ -45,27 +45,20 @@ class Main extends hxd.App {
 
 		s3d.lightSystem.ambientLight.set(0.74, 0.74, 0.74);
 
-		//Some prim cubes
 
-		rnd = new hxd.Rand(5);
-		for(i in 0...4) {
-			var c = new h3d.prim.Cube();
-			//c.unindex();
-			c.addNormals();
-			c.addUVs();
-			var m = new h3d.scene.Mesh(c, s3d);
-			m.x = rnd.srand() * 0.9;
-			m.y = rnd.srand() * 0.9;
-			m.scale(0.25 + rnd.rand() * 0.3);
-			m.material.mainPass.enableLights = true;
-			m.material.shadows = true;
-			var c = 0.3 + rnd.rand() * 0.3;
-			var color = new h3d.Vector(c, c * 0.6, c * 0.6);
-			m.material.color.load(color);
+		//prim cube
 
-			var interact = new h3d.scene.Interactive(m.getCollider(), s3d);
-			initInteract(interact, m);
-		}
+		var c = new h3d.prim.Cube();
+		c.addNormals();
+		c.addUVs();
+		var m = new h3d.scene.Mesh(c, s3d);
+		m.y = 0.4;
+		m.scale(0.4);
+		m.material.color.setColor(0xaaaaaa);
+
+		var interact = new h3d.scene.Interactive(m.getCollider(), s3d);
+		initInteract(interact, m);
+
 
 		//Sample skeleton .fbx
 
@@ -73,8 +66,6 @@ class Main extends hxd.App {
 		obj = cache.loadModel(hxd.Res.Model);
 		obj.scale(1 / 20);
 		obj.rotate(0,0,Math.PI / 2);
-		obj.y = 0.2;
-		obj.z = 0.2;
 		s3d.addChild(obj);
 
 		obj.playAnimation(cache.loadAnimation(hxd.Res.Model)).speed = 0.1;
@@ -85,13 +76,12 @@ class Main extends hxd.App {
 			initInteract(i, m);
 		}
 		
+		
 		//My blender .fbx
 		
 		tex = cache.loadModel(hxd.Res.Tex_fbx);
 		tex.scale(1 / 5);
-		tex.rotate(0,0,Math.PI / 2);
-		tex.y = 0.2;
-		tex.z = 0.2;
+		tex.rotate(0,0,Math.PI / 2);		
 		s3d.addChild(tex);
 		
 		for( jj in tex.getMeshes() ) {
@@ -100,17 +90,19 @@ class Main extends hxd.App {
 			initInteract(ttt, m);
 		}
 		
+		
 	}
 	
-	var cam:h3d.scene.CameraController;
-
+	
 	override function update(dt:Float) {
-		obj.rotate(0, 0, 0.12 * dt);
+		obj.rotate(0, 0, 0.1 * dt);
+		tex.rotate(0, 0, -0.1 * dt);
 		
 		if(Key.isDown(Key.W)) s3d.camera.forward(1);
 		if(Key.isDown(Key.S)) s3d.camera.forward(-1);
 		if(Key.isDown(Key.A)) s3d.camera.pos.y += 0.1;
 		if(Key.isDown(Key.D)) s3d.camera.pos.y -= 0.1;
+		
 	}
 
 
